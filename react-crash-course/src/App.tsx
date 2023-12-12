@@ -1,23 +1,58 @@
 import { useState } from "react";
 import ListGroup from "./components/ListGroup";
+import TodoList from "./components/TodoList";
 
 import "./App.css";
 
 function App() {
-  const [selectIndex, setIndex] = useState(-1);
+  const [todoItems, setItems] = useState([
+    {
+      id: 1,
+      name: "eat momo",
+      description: "eat momo in plaza",
+      iscomplete: true,
+    },
+    {
+      id: 2,
+      name: "eat momo2",
+      description: "eat momo in plaza",
+      iscomplete: false,
+    },
+    {
+      id: 3,
+      name: "eat momo3",
+      description: "eat momo in plaza",
+      iscomplete: false,
+    },
+  ]);
 
-  const countries = ["United States", "Canada", "Nepal", "France", "Australia"];
+  const updateTodoItem = (id: number) => {
+    const updatedItems = todoItems.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          iscomplete: !item.iscomplete,
+        };
+      }
+      return item;
+    });
 
-  const highlightSelectedCountry = (index: number) => {
-    setIndex(index);
-    console.log(index);
-    console.log("selected index");
-    console.log(selectIndex);
+    setItems(updatedItems);
+  };
+
+  const deleteTodoItem = (id: number) => {
+    setItems(todoItems.filter((i) => i.id != id));
   };
 
   return (
     <div className="App">
-      <ListGroup items={countries} heading="Sanjay1" />
+      <div className="container">
+        <TodoList
+          items={todoItems}
+          onTaskCompleted={updateTodoItem}
+          onDeleteItem={deleteTodoItem}
+        />
+      </div>
     </div>
   );
 }
