@@ -1,15 +1,10 @@
 import React from "react";
-interface TodoItem {
-  id: number;
-  name: string;
-  description: string;
-  iscomplete: boolean;
-}
+import { TodoItem } from "../interfaces/TodoItem";
 
 interface Props {
   items: TodoItem[];
-  onTaskCompleted: (id: number) => void;
-  onDeleteItem: (id: number) => void;
+  onTaskCompleted: (id: string) => void;
+  onDeleteItem: (id: string) => void;
 }
 
 const TodoList = ({ items, onTaskCompleted, onDeleteItem }: Props) => {
@@ -26,19 +21,19 @@ const TodoList = ({ items, onTaskCompleted, onDeleteItem }: Props) => {
         </tr>
       </thead>
       <tbody>
-        {items.map((item) => {
+        {items.map((item, index) => {
           return (
             <tr key={item.id}>
-              <th scope="row">{item.id}</th>
+              <th scope="row">{index + 1}</th>
               <th
                 scope="row"
-                className={item.iscomplete ? "completed" : "not-completed"}
+                className={item.isComplete ? "completed" : "not-completed"}
               >
                 {item.name}
               </th>
               <th
                 scope="row"
-                className={item.iscomplete ? "completed" : "not-completed"}
+                className={item.isComplete ? "completed" : "not-completed"}
               >
                 {item.description}
               </th>
@@ -46,7 +41,7 @@ const TodoList = ({ items, onTaskCompleted, onDeleteItem }: Props) => {
                 <input
                   type="checkbox"
                   className="task-checkbox"
-                  checked={item.iscomplete}
+                  checked={item.isComplete}
                   onChange={() => onTaskCompleted(item.id)}
                 />
               </th>

@@ -1,37 +1,17 @@
-import { useState } from "react";
-import ListGroup from "./components/ListGroup";
+import { useEffect, useState } from "react";
 import TodoList from "./components/TodoList";
-
+import CreateItem from "./components/CreateItem";
 import "./App.css";
+import { TodoItem } from "./interfaces/TodoItem";
 
 function App() {
-  const [todoItems, setItems] = useState([
-    {
-      id: 1,
-      name: "eat momo",
-      description: "eat momo in plaza",
-      iscomplete: true,
-    },
-    {
-      id: 2,
-      name: "eat momo2",
-      description: "eat momo in plaza",
-      iscomplete: false,
-    },
-    {
-      id: 3,
-      name: "eat momo3",
-      description: "eat momo in plaza",
-      iscomplete: false,
-    },
-  ]);
-
-  const updateTodoItem = (id: number) => {
-    const updatedItems = todoItems.map((item) => {
+  const [todoItems, setItems] = useState<TodoItem[]>([]);
+  const updateTodoItem = (id: string) => {
+    const updatedItems = todoItems.map((item: TodoItem) => {
       if (item.id === id) {
         return {
           ...item,
-          iscomplete: !item.iscomplete,
+          isComplete: !item.isComplete,
         };
       }
       return item;
@@ -39,19 +19,46 @@ function App() {
 
     setItems(updatedItems);
   };
+  const handleDeleteItem = (id: string) => {
+    console.log("deleting item " + id);
 
-  const deleteTodoItem = (id: number) => {
-    setItems(todoItems.filter((i) => i.id != id));
+    const items = todoItems.filter((i) => i.id != id);
+    setItems(items);
   };
+
+  const handleCreateNewItem = (newItem: TodoItem) => {
+    // Use a functional update to ensure the latest state is used
+    setItems((prevItems) => {
+      const updatedItems = [...prevItems, newItem];
+      const updatedItemsJSON = JSON.stringify(updatedItems);
+      localStorage.setItem("items", updatedItemsJSON);
+      return updatedItems;
+    });
+  };
+
+  useEffect(() => {
+    const dataString = localStorage.getItem("items");
+    dataString && setItems(JSON.parse(dataString));
+  }, []);
 
   return (
     <div className="App">
       <div className="container">
+        <button
+          type="button"
+          className="btn btn-success action-button"
+          data-bs-toggle="modal"
+          data-bs-target="#taskModal"
+          title="Create"
+        >
+          Create New Task
+        </button>
         <TodoList
           items={todoItems}
           onTaskCompleted={updateTodoItem}
-          onDeleteItem={deleteTodoItem}
+          onDeleteItem={handleDeleteItem}
         />
+        <CreateItem onCreateItem={handleCreateNewItem} />
       </div>
     </div>
   );
