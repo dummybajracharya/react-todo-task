@@ -50,8 +50,7 @@ const TodoList = ({ items, onTaskCompleted, onDeleteItem }: Props) => {
                   className="btn btn-danger"
                   onClick={() => onDeleteItem(item.id)}
                 >
-                  {" "}
-                  Delete{" "}
+                  Delete
                 </button>
               </th>
             </tr>

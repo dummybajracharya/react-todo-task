@@ -19,6 +19,7 @@ function App() {
 
     setItems(updatedItems);
   };
+
   const handleDeleteItem = (id: string) => {
     console.log("deleting item " + id);
 
@@ -44,21 +45,12 @@ function App() {
   return (
     <div className="App">
       <div className="container">
-        <button
-          type="button"
-          className="btn btn-success action-button"
-          data-bs-toggle="modal"
-          data-bs-target="#taskModal"
-          title="Create"
-        >
-          Create New Task
-        </button>
+        <CreateItem onCreateItem={handleCreateNewItem} />
         <TodoList
           items={todoItems}
           onTaskCompleted={updateTodoItem}
           onDeleteItem={handleDeleteItem}
         />
-        <CreateItem onCreateItem={handleCreateNewItem} />
       </div>
     </div>
   );
